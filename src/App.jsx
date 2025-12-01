@@ -377,15 +377,22 @@ const InterestTab = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-sm border border-gray-100">
-      <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center">
-        <DollarSign className="mr-2 text-red-600" /> Calculadora de Juros (2.5% a.d.)
+    <section 
+      className="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-sm border border-gray-100"
+      aria-labelledby="calculator-title"
+    >
+      <h2 id="calculator-title" className="text-xl font-bold text-gray-800 mb-6 flex items-center">
+        <DollarSign className="mr-2 text-red-600" aria-hidden="true" /> 
+        Calculadora de Juros (2.5% a.d.)
       </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Valor Original (R$)</label>
+          <label htmlFor="value-input" className="block text-sm font-medium text-gray-700 mb-1">
+            Valor Original (R$)
+          </label>
           <input
+            id="value-input"
             type="number"
             value={value}
             onChange={(e) => setValue(e.target.value)}
@@ -393,8 +400,11 @@ const InterestTab = () => {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Data de Vencimento</label>
+          <label htmlFor="date-input" className="block text-sm font-medium text-gray-700 mb-1">
+            Data de Vencimento
+          </label>
           <input
+            id="date-input"
             type="date"
             value={dueDate}
             onChange={(e) => setDueDate(e.target.value)}
@@ -404,38 +414,41 @@ const InterestTab = () => {
       </div>
 
       <div className="bg-yellow-50 p-4 rounded-lg mb-6 border border-yellow-100">
-        <div className="flex items-center text-sm text-yellow-800">
-          <Calendar className="mr-2" size={16}/>
+        <p className="flex items-center text-sm text-yellow-800">
+          <Calendar className="mr-2" size={16} aria-hidden="true"/>
           <span>Data Base de Cálculo (Hoje): <strong>{today.toLocaleDateString('pt-BR')}</strong></span>
-        </div>
+        </p>
       </div>
 
       <button 
         onClick={calculateInterest}
         className="w-full bg-gray-900 text-white py-3 rounded-lg hover:bg-gray-800 transition font-bold flex items-center justify-center"
       >
-        Calcular Juros <ArrowRight className="ml-2" size={18} />
+        Calcular Juros <ArrowRight className="ml-2" size={18} aria-hidden="true" />
       </button>
 
-      {result && (
-        <div className="mt-8 pt-6 border-t border-gray-100 animate-fadeIn">
-          <div className="grid grid-cols-3 gap-4 text-center">
-            <div className="p-3 bg-gray-50 rounded-lg">
-              <div className="text-xs text-gray-500 uppercase tracking-wide">Dias Atraso</div>
-              <div className="text-xl font-bold text-gray-800">{result.days} dias</div>
-            </div>
-            <div className="p-3 bg-red-50 rounded-lg">
-               <div className="text-xs text-red-500 uppercase tracking-wide">Juros</div>
-              <div className="text-xl font-bold text-red-600">+ R$ {result.interest.toFixed(2)}</div>
-            </div>
-            <div className="p-3 bg-green-50 rounded-lg border border-green-100">
-               <div className="text-xs text-green-500 uppercase tracking-wide">Total a Pagar</div>
-              <div className="text-xl font-bold text-green-700">R$ {result.total.toFixed(2)}</div>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
+      {/* Área de Resultados com aria-live para anunciar mudanças */}
+      <div aria-live="polite" className="mt-8">
+        {result && (
+          <section className="pt-6 border-t border-gray-100 animate-fadeIn" aria-label="Resultados do cálculo">
+            <dl className="grid grid-cols-3 gap-4 text-center">
+              <div className="p-3 bg-gray-50 rounded-lg">
+                <dt className="text-xs text-gray-500 uppercase tracking-wide">Dias Atraso</dt>
+                <dd className="text-xl font-bold text-gray-800">{result.days} dias</dd>
+              </div>
+              <div className="p-3 bg-red-50 rounded-lg">
+                 <dt className="text-xs text-red-500 uppercase tracking-wide">Juros</dt>
+                <dd className="text-xl font-bold text-red-600">+ R$ {result.interest.toFixed(2)}</dd>
+              </div>
+              <div className="p-3 bg-green-50 rounded-lg border border-green-100">
+                 <dt className="text-xs text-green-500 uppercase tracking-wide">Total a Pagar</dt>
+                <dd className="text-xl font-bold text-green-700">R$ {result.total.toFixed(2)}</dd>
+              </div>
+            </dl>
+          </section>
+        )}
+      </div>
+    </section>
   );
 };
 
@@ -444,34 +457,36 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-gray-100 font-sans">
-      <div className="bg-gray-900 text-white pb-24 pt-8">
+      <header className="bg-gray-900 text-white pb-24 pt-8">
         <div className="container mx-auto px-4">
           <h1 className="text-3xl font-bold mb-2">Desafio Target Sistemas</h1>
           <p className="text-gray-400">Implementação de Lógica de Negócios e Controle de Estoque</p>
         </div>
-      </div>
+      </header>
 
-      <div className="container mx-auto px-4 -mt-16">
-        <div className="bg-white rounded-t-xl shadow-sm border-b border-gray-200 flex overflow-x-auto">
-          <TabButton 
-            active={activeTab === 'vendas'} 
-            onClick={() => setActiveTab('vendas')} 
-            icon={TrendingUp} 
-            label="1. Vendas & Comissões" 
-          />
-          <TabButton 
-            active={activeTab === 'estoque'} 
-            onClick={() => setActiveTab('estoque')} 
-            icon={Package} 
-            label="2. Controle de Estoque" 
-          />
-          <TabButton 
-            active={activeTab === 'juros'} 
-            onClick={() => setActiveTab('juros')} 
-            icon={DollarSign} 
-            label="3. Cálculo de Juros" 
-          />
-        </div>
+      <main className="container mx-auto px-4 -mt-16">
+        <nav aria-label="Abas de navegação principal">
+          <div className="bg-white rounded-t-xl shadow-sm border-b border-gray-200 flex overflow-x-auto">
+            <TabButton 
+              active={activeTab === 'vendas'} 
+              onClick={() => setActiveTab('vendas')} 
+              icon={TrendingUp} 
+              label="1. Vendas & Comissões" 
+            />
+            <TabButton 
+              active={activeTab === 'estoque'} 
+              onClick={() => setActiveTab('estoque')} 
+              icon={Package} 
+              label="2. Controle de Estoque" 
+            />
+            <TabButton 
+              active={activeTab === 'juros'} 
+              onClick={() => setActiveTab('juros')} 
+              icon={DollarSign} 
+              label="3. Cálculo de Juros" 
+            />
+          </div>
+        </nav>
 
         <div className="py-8">
           {activeTab === 'vendas' && <SalesTab />}
@@ -479,10 +494,10 @@ export default function App() {
           {activeTab === 'juros' && <InterestTab />}
         </div>
         
-        <div className="text-center text-gray-400 text-sm py-4">
+        <footer className="text-center text-gray-400 text-sm py-4">
           Desenvolvido como parte do teste técnico
-        </div>
-      </div>
+        </footer>
+      </main>
     </div>
   );
 }
