@@ -190,18 +190,25 @@ const StockTab = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <section className="space-y-6" aria-label="Gerenciamento de Estoque">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Controle */}
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-          <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
-            <Package className="mr-2 text-red-600" /> Movimentação de Estoque
+        <section 
+          className="bg-white p-6 rounded-xl shadow-sm border border-gray-100"
+          aria-labelledby="stock-control-title"
+        >
+          <h2 id="stock-control-title" className="text-xl font-bold text-gray-800 mb-4 flex items-center">
+            <Package className="mr-2 text-red-600" aria-hidden="true" /> 
+            Movimentação de Estoque
           </h2>
           
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Produto</label>
+              <label htmlFor="product-select" className="block text-sm font-medium text-gray-700 mb-1">
+                Produto
+              </label>
               <select 
+                id="product-select"
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-red-500 focus:border-red-500"
                 value={selectedProduct}
                 onChange={(e) => setSelectedProduct(e.target.value)}
@@ -215,26 +222,31 @@ const StockTab = () => {
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Tipo</label>
+              <div role="group" aria-label="Tipo de movimentação">
+                <span className="block text-sm font-medium text-gray-700 mb-1">Tipo</span>
                 <div className="flex space-x-2">
                   <button 
                     onClick={() => setType('IN')}
+                    aria-pressed={type === 'IN'}
                     className={`flex-1 py-2 px-3 rounded-md flex items-center justify-center space-x-1 ${type === 'IN' ? 'bg-green-100 text-green-700 border border-green-300' : 'bg-gray-100 text-gray-500'}`}
                   >
-                    <Plus size={16} /> <span>Entrada</span>
+                    <Plus size={16} aria-hidden="true" /> <span>Entrada</span>
                   </button>
                   <button 
                     onClick={() => setType('OUT')}
+                    aria-pressed={type === 'OUT'}
                     className={`flex-1 py-2 px-3 rounded-md flex items-center justify-center space-x-1 ${type === 'OUT' ? 'bg-red-100 text-red-700 border border-red-300' : 'bg-gray-100 text-gray-500'}`}
                   >
-                    <Minus size={16} /> <span>Saída</span>
+                    <Minus size={16} aria-hidden="true" /> <span>Saída</span>
                   </button>
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Quantidade</label>
+                <label htmlFor="qty-input" className="block text-sm font-medium text-gray-700 mb-1">
+                  Quantidade
+                </label>
                 <input 
+                  id="qty-input"
                   type="number" 
                   className="w-full p-2 border border-gray-300 rounded-md"
                   value={qty}
@@ -244,8 +256,11 @@ const StockTab = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Descrição / Motivo</label>
+              <label htmlFor="desc-input" className="block text-sm font-medium text-gray-700 mb-1">
+                Descrição / Motivo
+              </label>
               <input 
+                id="desc-input"
                 type="text" 
                 className="w-full p-2 border border-gray-300 rounded-md"
                 value={desc}
@@ -257,52 +272,67 @@ const StockTab = () => {
               onClick={handleMovement}
               className="w-full bg-red-600 text-white py-2 rounded-md hover:bg-red-700 transition font-medium flex items-center justify-center"
             >
-              <Save size={18} className="mr-2" /> Registrar Movimento
+              <Save size={18} className="mr-2" aria-hidden="true" /> 
+              Registrar Movimento
             </button>
           </div>
-        </div>
+        </section>
 
         {/* Lista Atual */}
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-           <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
-            <History className="mr-2 text-gray-600" /> Estoque Atual
+        <section 
+          className="bg-white p-6 rounded-xl shadow-sm border border-gray-100"
+          aria-labelledby="current-stock-title"
+        >
+           <h2 id="current-stock-title" className="text-xl font-bold text-gray-800 mb-4 flex items-center">
+            <History className="mr-2 text-gray-600" aria-hidden="true" /> 
+            Estoque Atual
           </h2>
-          <div className="space-y-2">
+          <ul className="space-y-2">
             {products.map(p => (
-              <div key={p.codigoProduto} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg border border-gray-100">
+              <li key={p.codigoProduto} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg border border-gray-100">
                 <div>
                   <div className="font-semibold text-gray-800">{p.descricaoProduto}</div>
                   <div className="text-xs text-gray-500">Cód: {p.codigoProduto}</div>
                 </div>
-                <div className="text-xl font-bold text-gray-800">{p.estoque}</div>
-              </div>
+                <div className="text-xl font-bold text-gray-800" aria-label={`${p.estoque} unidades`}>
+                  {p.estoque}
+                </div>
+              </li>
             ))}
-          </div>
-        </div>
+          </ul>
+        </section>
       </div>
 
       {/* Histórico */}
       {movements.length > 0 && (
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-          <h3 className="font-bold text-gray-700 mb-3">Histórico de Movimentações (Sessão Atual)</h3>
+        <section 
+          className="bg-white p-6 rounded-xl shadow-sm border border-gray-100"
+          aria-labelledby="history-title"
+        >
+          <h3 id="history-title" className="font-bold text-gray-700 mb-3">
+            Histórico de Movimentações (Sessão Atual)
+          </h3>
           <div className="overflow-x-auto">
             <table className="w-full text-sm text-left">
+              <caption className="sr-only">Registro detalhado de entradas e saídas</caption>
               <thead className="bg-gray-50 text-gray-600">
                 <tr>
-                  <th className="px-4 py-2">ID</th>
-                  <th className="px-4 py-2">Tipo</th>
-                  <th className="px-4 py-2">Prod ID</th>
-                  <th className="px-4 py-2">Qtd</th>
-                  <th className="px-4 py-2">Descrição</th>
+                  <th scope="col" className="px-4 py-2">ID</th>
+                  <th scope="col" className="px-4 py-2">Tipo</th>
+                  <th scope="col" className="px-4 py-2">Prod ID</th>
+                  <th scope="col" className="px-4 py-2">Qtd</th>
+                  <th scope="col" className="px-4 py-2">Descrição</th>
                 </tr>
               </thead>
               <tbody>
                 {movements.map(m => (
                   <tr key={m.id} className="border-b">
-                    <td className="px-4 py-2 font-mono text-xs">{m.id}</td>
+                    <th scope="row" className="px-4 py-2 font-mono text-xs font-normal text-gray-500">
+                      {m.id}
+                    </th>
                     <td className="px-4 py-2">
-                      <span className={`px-2 py-0.5 rounded text-xs ${m.tipo === 'IN' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                        {m.tipo}
+                      <span className={`px-2 py-0.5 rounded text-xs font-bold ${m.tipo === 'IN' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                        {m.tipo === 'IN' ? 'Entrada' : 'Saída'}
                       </span>
                     </td>
                     <td className="px-4 py-2">{m.produtoId}</td>
@@ -313,9 +343,9 @@ const StockTab = () => {
               </tbody>
             </table>
           </div>
-        </div>
+        </section>
       )}
-    </div>
+    </section>
   );
 };
 
