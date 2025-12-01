@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Calculator, Package, TrendingUp, DollarSign, Calendar, ArrowRight, Save, History, Plus, Minus } from 'lucide-react';
 
-// --- DADOS INICIAIS (DO JSON DO TESTE) ---
+// Dados do Json
 const initialSalesData = [
   { vendedor: "João Silva", valor: 1200.50 },
   { vendedor: "João Silva", valor: 950.75 },
@@ -49,7 +49,7 @@ const initialStockData = [
   { codigoProduto: 105, descricaoProduto: "Marcador de Texto Amarelo", estoque: 90 }
 ];
 
-// --- COMPONENTES ---
+// Componentes
 
 const TabButton = ({ active, onClick, icon: Icon, label }) => (
   <button
