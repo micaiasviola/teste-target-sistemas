@@ -92,40 +92,48 @@ const SalesTab = () => {
   const totalComissao = processedSales.reduce((acc, curr) => acc + curr.comissaoValor, 0);
 
   return (
-    <div className="space-y-6 animate-fadeIn">
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-        <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
-          <TrendingUp className="mr-2 text-red-600" /> Relatório de Comissões
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-          <div className="bg-blue-50 p-4 rounded-lg">
-            <span className="text-sm text-blue-600 font-semibold">Total de Vendas</span>
+    <section className="space-y-6 animate-fadeIn" aria-label="Painel de Vendas">
+      <article className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+        <header className="mb-6">
+          <h2 className="text-xl font-bold text-gray-800 flex items-center">
+            <TrendingUp className="mr-2 text-red-600" aria-hidden="true" /> 
+            Relatório de Comissões
+          </h2>
+        </header>
+
+        {/* Métricas como Lista de Itens */}
+        <ul className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          <li className="bg-blue-50 p-4 rounded-lg">
+            <h3 className="text-sm text-blue-600 font-semibold mb-1">Total de Vendas</h3>
             <p className="text-2xl font-bold text-blue-900">
               {processedSales.length}
             </p>
-          </div>
-          <div className="bg-green-50 p-4 rounded-lg">
-            <span className="text-sm text-green-600 font-semibold">Total Comissionado</span>
+          </li>
+          <li className="bg-green-50 p-4 rounded-lg">
+            <h3 className="text-sm text-green-600 font-semibold mb-1">Total Comissionado</h3>
             <p className="text-2xl font-bold text-green-900">
               R$ {totalComissao.toFixed(2).replace('.', ',')}
             </p>
-          </div>
-        </div>
+          </li>
+        </ul>
 
         <div className="overflow-x-auto">
           <table className="w-full text-sm text-left">
+            <caption className="sr-only">Tabela detalhada de comissões por vendedor</caption>
             <thead className="text-xs text-gray-700 uppercase bg-gray-50">
               <tr>
-                <th className="px-6 py-3">Vendedor</th>
-                <th className="px-6 py-3">Valor Venda</th>
-                <th className="px-6 py-3">% Comissão</th>
-                <th className="px-6 py-3">Valor Comissão</th>
+                <th scope="col" className="px-6 py-3">Vendedor</th>
+                <th scope="col" className="px-6 py-3">Valor Venda</th>
+                <th scope="col" className="px-6 py-3">% Comissão</th>
+                <th scope="col" className="px-6 py-3">Valor Comissão</th>
               </tr>
             </thead>
             <tbody>
               {processedSales.map((sale) => (
                 <tr key={sale.id} className="bg-white border-b hover:bg-gray-50">
-                  <td className="px-6 py-4 font-medium text-gray-900">{sale.vendedor}</td>
+                  <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                    {sale.vendedor}
+                  </th>
                   <td className="px-6 py-4">R$ {sale.valor.toFixed(2)}</td>
                   <td className="px-6 py-4">
                     <span className={`px-2 py-1 rounded-full text-xs font-bold ${
@@ -144,8 +152,8 @@ const SalesTab = () => {
             </tbody>
           </table>
         </div>
-      </div>
-    </div>
+      </article>
+    </section>
   );
 };
 
